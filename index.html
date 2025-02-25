@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF AI Chatbot</title>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .neubrutalism {
+            border: 3px solid black;
+            box-shadow: 5px 5px 0px 0px black;
+        }
+        .chat-container {
+            height: calc(100vh - 180px);
+        }
+        .typing-indicator {
+            display: inline-flex;
+            gap: 2px;
+        }
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #000;
+            border-radius: 50%;
+            animation: typing 1s infinite;
+        }
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body class="bg-purple-100 p-4 md:p-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="neubrutalism bg-purple-300 p-6 mb-6 rounded-lg">
+            <h1 class="text-2xl md:text-3xl font-bold">PDF-Powered AI Chatbot</h1>
+            <p class="text-gray-700">Powered by 50 PDF documents and advanced NLP</p>
+        </div>
+
+        <!-- Main Chat Interface -->
+        <div class="flex flex-col md:flex-row gap-4">
+            <!-- Conversation List -->
+            <div class="neubrutalism bg-white w-full md:w-1/4 p-4 rounded-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-bold">Conversations</h2>
+                    <button class="neubrutalism bg-purple-200 px-3 py-1 rounded hover:bg-purple-300 transition-colors">
+                        New Chat
+                    </button>
+                </div>
+                <div class="space-y-2">
+                    <div class="neubrutalism bg-purple-200 p-2 rounded cursor-pointer">
+                        Chat #1
+                    </div>
+                    <div class="p-2 rounded cursor-pointer hover:bg-purple-100">
+                        Chat #2
+                    </div>
+                    <div class="p-2 rounded cursor-pointer hover:bg-purple-100">
+                        Chat #3
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Area -->
+            <div class="neubrutalism bg-white flex-grow p-4 rounded-lg">
+                <div class="chat-container overflow-y-auto mb-4">
+                    <!-- AI Message -->
+                    <div class="mb-4">
+                        <div class="flex items-start gap-2">
+                            <div class="neubrutalism bg-purple-200 p-2 rounded-full">
+                                <i class="bi bi-robot"></i>
+                            </div>
+                            <div class="neubrutalism bg-purple-100 p-3 rounded-lg max-w-[80%]">
+                                <p>Hello! I'm your AI assistant. I can help you analyze and discuss the content from your PDF documents. What would you like to know?</p>
+                                <div class="mt-2 text-sm text-gray-500">
+                                    Source: System Introduction
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Message -->
+                    <div class="mb-4">
+                        <div class="flex items-start gap-2 justify-end">
+                            <div class="neubrutalism bg-purple-300 p-3 rounded-lg max-w-[80%]">
+                                <p>Can you tell me about the main topics covered in the PDFs?</p>
+                            </div>
+                            <div class="neubrutalism bg-purple-200 p-2 rounded-full">
+                                <i class="bi bi-person"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Typing Indicator -->
+                    <div class="flex items-center gap-2">
+                        <div class="neubrutalism bg-purple-200 p-2 rounded-full">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <div class="neubrutalism bg-purple-100 p-3 rounded-lg">
+                            <div class="typing-indicator">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="neubrutalism bg-purple-100 p-3 rounded-lg">
+                    <div class="flex items-center gap-2">
+                        <input type="text" placeholder="Type your message here..." class="w-full p-2 rounded border-2 border-black focus:outline-none">
+                        <button class="neubrutalism bg-purple-300 p-2 rounded hover:bg-purple-400 transition-colors">
+                            <i class="bi bi-send"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Message sending functionality
+        const input = document.querySelector('input');
+        const sendButton = document.querySelector('button:has(.bi-send)');
+        const chatContainer = document.querySelector('.chat-container');
+
+        function sendMessage() {
+            const message = input.value.trim();
+            if (message) {
+                // Create and append user message
+                const userMessage = `
+                    <div class="mb-4">
+                        <div class="flex items-start gap-2 justify-end">
+                            <div class="neubrutalism bg-purple-300 p-3 rounded-lg max-w-[80%]">
+                                <p>${message}</p>
+                            </div>
+                            <div class="neubrutalism bg-purple-200 p-2 rounded-full">
+                                <i class="bi bi-person"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                chatContainer.insertAdjacentHTML('beforeend', userMessage);
+                input.value = '';
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // New chat button functionality
+        document.querySelector('button:has(not(.bi-send))').addEventListener('click', () => {
+            chatContainer.innerHTML = `
+                <div class="mb-4">
+                    <div class="flex items-start gap-2">
+                        <div class="neubrutalism bg-purple-200 p-2 rounded-full">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <div class="neubrutalism bg-purple-100 p-3 rounded-lg max-w-[80%]">
+                            <p>Hello! I'm your AI assistant. I can help you analyze and discuss the content from your PDF documents. What would you like to know?</p>
+                            <div class="mt-2 text-sm text-gray-500">
+                                Source: System Introduction
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
